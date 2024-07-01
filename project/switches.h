@@ -1,12 +1,9 @@
-#ifndef switches_included
-#define switches_included
+#ifndef SWITCHES_H
+#define SWITCHES_H
 
-#define SW1 BIT3      /* Switch1 is p1.3 */
-#define SWITCHES SW1  /* Only 1 switch on this board */
+#define SWITCHES (BIT0 | BIT1 | BIT2 | BIT3)  // Define switches on P2.0-3
 
-void switch_init();
-void switch_interrupt_handler();
+void switch_init(void);
+void switch_interrupt_handler(void);
 
-extern char switch_state_down, switch_state_changed; /* Effectively boolean */
-
-#endif // Included
+#endif // SWITCHES_H

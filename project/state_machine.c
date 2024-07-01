@@ -1,68 +1,63 @@
+#include <msp430.h>
 #include "state_machine.h"
 #include "led.h"
-#include "sound.h"
+#include "buzzer.h"
 
-typedef enum {
-    STATE_OFF,
-    STATE_PLAYING,
-    STATE_PAUSED,
-    STATE_STOPPED
-} toy_state_t;
-
-static toy_state_t current_state;
+enum { STATE_OFF, STATE_ON, STATE_DIM, STATE_SOUND, STATE_ALTERNATE } state;
+unsigned char alternate = 0;
 
 void state_machine_init(void) {
-    current_state = STATE_OFF;
+    state = STATE_OFF;
     led_off();
-    sound_off();
+    buzzer_set_period(0); // Turn off buzzer
 }
 
 void state_machine_update(void) {
-    switch (current_state) {
+    switch (state) {
         case STATE_OFF:
             led_off();
-            sound_off();
+            buzzer_set_period(0); // Turn off buzzer
             break;
-        case STATE_PLAYING:
+        case STATE_ON:
             led_on();
-            play_tone(1000); // Example tone
             break;
-        case STATE_PAUSED:
+        case STATE_DIM:
             led_dim();
-            sound_off();
             break;
-        case STATE_STOPPED:
-            led_off();
-            sound_off();
+        case STATE_SOUND:
+            buzzer_set_period(1000); // Example frequency, 2kHz tone
+            break;
+        case STATE_ALTERNATE:
+            // Alternate LEDs
+            if (alternate) {
+                P1OUT |= BIT0;  // Turn on LED1
+                P1OUT &= ~BIT6; // Turn off LED2
+            } else {
+                P1OUT |= BIT6;  // Turn on LED2
+                P1OUT &= ~BIT0; // Turn off LED1
+            }
+            alternate = !alternate; // Toggle the alternate variable
             break;
     }
 }
 
-void state_transition(toy_state_t new_state) {
-    current_state = new_state;
+void state_transition(unsigned char button) {
+    switch (button) {
+        case BIT0:
+            state = STATE_OFF;
+            break;
+        case BIT1:
+            state = STATE_ON;
+            break;
+        case BIT2:
+            state = STATE_DIM;
+            break;
+        case BIT3:
+            state = STATE_SOUND;
+            break;
+        case BIT4:
+            state = STATE_ALTERNATE;
+            break;
+    }
     state_machine_update();
-}
-
-void button1_pressed(void) {
-    if (current_state == STATE_OFF) {
-        state_transition(STATE_PLAYING);
-    }
-}
-
-void button2_pressed(void) {
-    if (current_state == STATE_PLAYING) {
-        state_transition(STATE_PAUSED);
-    }
-}
-
-void button3_pressed(void) {
-    if (current_state == STATE_PAUSED) {
-        state_transition(STATE_STOPPED);
-    }
-}
-
-void button4_pressed(void) {
-    if (current_state == STATE_STOPPED) {
-        state_transition(STATE_OFF);
-    }
 }

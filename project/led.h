@@ -7,6 +7,6 @@ void led_init(void);
 void led_on(void);
 void led_off(void);
 void led_dim(void);
-void led_update(void);  // Add this line
+void led_update(void);
 
 #endif // LED_H

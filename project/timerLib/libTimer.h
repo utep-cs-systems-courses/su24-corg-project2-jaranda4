@@ -1,11 +1,8 @@
-#ifndef libTimer_included
-#define libTimer_included
+#ifndef LIBTIMER_H
+#define LIBTIMER_H
 
 void configureClocks();
 void enableWDTInterrupts();
 void timerAUpmode();
 
-unsigned char get_sr();
-void set_sr(), or_sr(), and_sr();
-
-#endif // included
+#endif // LIBTIMER_H

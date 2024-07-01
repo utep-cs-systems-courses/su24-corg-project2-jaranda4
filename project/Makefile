@@ -3,7 +3,7 @@ CC = msp430-elf-gcc
 CFLAGS = -mmcu=msp430g2553 -I./h -I./timerLib
 
 # Source files
-SRCS = p1_interrupt_handler.c led.c switches.c buttonMain.c
+SRCS = p1_interrupt_handler.c led.c switches.c buttonMain.c state_machine.c buzzer.c
 OBJS = $(SRCS:.c=.o)
 
 # Target executable
@@ -26,4 +26,4 @@ load: $(TARGET)
 
 # Clean rule
 clean:
-	rm -f $(OB
+	rm -f $(OBJS) $(TARGET)

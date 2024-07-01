@@ -3,9 +3,6 @@
 
 void state_machine_init(void);
 void state_machine_update(void);
-void button1_pressed(void);
-void button2_pressed(void);
-void button3_pressed(void);
-void button4_pressed(void);
+void state_transition(unsigned char button);
 
 #endif // STATE_MACHINE_H
