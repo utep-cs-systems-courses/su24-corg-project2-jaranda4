@@ -18,18 +18,18 @@ void led_off(void) {
 }
 
 void led_dim(void) {
-    dimThreshold = 40;  // Adjust this value to change dimming level (higher = dimmer)
+    dimThreshold = 100;  // Adjust this value to change dimming level (higher = dimmer)
 }
 
-//void led_update(void) {
-  //dimCounter++;
-    // if (dimCounter >= 500) {
-       //dimCounter = 0;
-	//}
+void led_update(void) {
+  dimCounter++;
+     if (dimCounter >= 500) {
+       dimCounter = 0;
+	}
 
-    // if (dimCounter < dimThreshold) {
-//P1OUT |= LEDS;  // Turn on LEDs
-	// } else {
-      // P1OUT &= ~LEDS;  // Turn off LEDs
-	// }
-//}
+     if (dimCounter < dimThreshold) {
+P1OUT |= LEDS;  // Turn on LEDs
+	 } else {
+       P1OUT &= ~LEDS;  // Turn off LEDs
+	 }
+}

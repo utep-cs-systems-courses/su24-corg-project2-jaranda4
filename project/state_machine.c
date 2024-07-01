@@ -3,7 +3,7 @@
 #include "led.h"
 #include "buzzer.h"
 
-enum { STATE_OFF, STATE_ON, STATE_DIM, STATE_SOUND, STATE_ALTERNATE } state;
+enum { STATE_OFF, STATE_ON, STATE_DIM, STATE_BRIGHT, STATE_SOUND, STATE_ALTERNATE } state;
 unsigned char alternate = 0;
 
 void state_machine_init(void) {
@@ -23,6 +23,9 @@ void state_machine_update(void) {
             break;
         case STATE_DIM:
             led_dim();
+            break;
+        case STATE_BRIGHT:
+            led_on(); // Set to full brightness
             break;
         case STATE_SOUND:
             buzzer_set_period(1000); // Example frequency, 2kHz tone
@@ -50,7 +53,11 @@ void state_transition(unsigned char button) {
             state = STATE_ON;
             break;
         case BIT2:
-            state = STATE_DIM;
+            if (state == STATE_DIM) {
+                state = STATE_BRIGHT; // Toggle between dim and bright
+            } else {
+                state = STATE_DIM;
+            }
             break;
         case BIT3:
             state = STATE_SOUND;

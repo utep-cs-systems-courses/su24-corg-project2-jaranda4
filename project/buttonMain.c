@@ -26,5 +26,5 @@ void __interrupt_vec(PORT2_VECTOR) Port_2(void) {
 // Watchdog Timer Interrupt Service Routine
 void __interrupt_vec(WDT_VECTOR) WDT(void) {
     state_machine_update(); // Call state machine update
-    // led_update();           // Call led_update to handle dimming
+     led_update();           // Call led_update to handle dimming
 }
